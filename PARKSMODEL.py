@@ -1,9 +1,16 @@
 #JERDON HELGESON
 #PARKS MODEL
 
-import GetWeather as WTHR
+from __future__ import print_function
+import requests
+import Conversions as CONV
+import Weather as WTHR
 import datetime as DT
 now = DT.datetime.now()
+
+
+KEY = "AIzaSyAeeM9Ms_AFDC3gOxZixvm4qdgXHf8njFs"
+apiURL = "https://maps.googleapis.com/maps/api/geocode/json?address="
 
 class Park:
     #attributes
@@ -17,26 +24,34 @@ class Park:
     currentTemp = 0
 
     #methods
-    def __init__(self, name = None, state = None, lat = None, lng = None, vis = None):
+    def __init__(self, name = None, state = None,
+                 lat = None, lng = None, vis = None, wthr = False):
         self.name = name #1
         self.state = state #2
         self.lat = lat #3
         self.lng = lng #4
         self.annualVisitors = vis #5
-        self.setWeather()
-        self.setTemp()
+        if(wthr == True):
+            self.setWeather()
+            self.setTemp()
         #self.weather = cw
         #self.currentTemp = ct #7
+
+    def __eq__(self, other):
+        if(self.name == other.name):
+            return True
+        else:
+            return False
         
         
     
     def getDistance(self, user):
-        """Get the distance between two parks"""
-        lat1 = self.lat
-        lat2 = user.lat
-        lng1 = self.lng
-        lng2 = user.lng
-        return (((lat1 - lat2)**2) + ((lng1 - lng2)**2))**0.5
+        """Get the distance between two entities"""
+        lat1 = self.lat; lat2 = user.lat; lng1 = self.lng; lng2 = user.lng
+        #(((lat1 - lat2)**2) + ((lng1 - lng2)**2))**0.5
+        kmDist = CONV.distBetweenCoords(lat1,lng1,lat2,lng2)
+        mDist = CONV.kmToMiles(kmDist)
+        return mDist
 
     def setWeather(self, date = None):
         self.weather = WTHR.getCurrentWeather(self.lat, self.lng)
@@ -44,18 +59,26 @@ class Park:
     def setTemp(self, date = None):
         self.currentTemp = WTHR.getCurrentTemp(self.lat, self.lng)
          
-
+"""
     def displayParkDeets(self):
         print(self.name," Information: ", sep = "")
         for d in self.__dict__:
             if(d != "name"):
                 print("\t",d,": ",self.__dict__[d])
-        
+
+    def __str__(self):
+        daStr = self.name + " Information: "
+        for d in self.__dict__:
+            if(d != "name"):
+                daStr = daStr + "\n\t"+d+": "+self.__dict__[d]
+        return daStr
+"""       
 
 
 
 
 class User:
+    """
     name: "User"
     state: "n/a"
     lat = 0
@@ -68,15 +91,16 @@ class User:
     tempRange = 0
     travelStartDate = (now.month,now.day)
     travelEndDate = (now.month,now.day)
+    """
 
-    def __init__(self,name = None, state = None, lat = None, lng = None,
-                 iS = None, mTD = None,
+    def __init__(self,name = None, state = None, addy = None,
+                 mTD = None, iS = None,
                  pVD = None, pW = ["Any"], pT = None, tR = None,
                  tSD = (now.month, now.day), tED = (now.month, now.day)):
         self.name = name
         self.state = state
-        self.lat = lat
-        self.lng = lng
+        a = str(addy) + str(state)
+        self.setLatLng(a)
         self.inState = iS
         self.maxTravelDistance = mTD
         self.preferredVisitorsDensity = pVD
@@ -85,6 +109,13 @@ class User:
         self.tempRange = tR
         self.travelStartDate = tSD
         self.travelEndDate = tED
+
+    def setLatLng(self, addy):
+        request = apiURL + addy + "&key="+KEY
+        response = (requests.get(request)).json()
+        jsonData = response['results'][0]
+        self.lat = jsonData['geometry']['location']['lat']
+        self.lng = jsonData['geometry']['location']['lng']
         
     def displayUserDeets(self):
         print("User Information:")
@@ -98,12 +129,14 @@ class User:
     def checkAbsolutes(self, park):
         """This will check the values of a park that determine if it is even eligable to be checked (think distance)"""
         #Check distance
-        if(park.getDistance(self) <= self.maxTravelDistance):
-            print("\t",park.name, ": is within the range of", self.name, "'s location", sep = "")
-            return 0
+        #print("Park Distance: ", park.getDistance(self))
+        #print(self.maxTravelDistance, " < ", park.getDistance(self))
+        if((float(park.getDistance(self))) <= (self.maxTravelDistance)):
+            print("\t",park.name, ": is within the range of ", self.name, "'s location", sep = "")
+            return True
         else:
             print("\t",park.name," is not within the travel range")
-            return -1
+            return False
 
     def checkWeather(self, park):
         """Blanket method that rates the parks based on their weather"""
@@ -150,4 +183,4 @@ class User:
     
         
         
-        
+       

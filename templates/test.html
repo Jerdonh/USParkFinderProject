@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>US PARK FINDER</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="../static/page.css" rel="stylesheet">
+
+</head>
+<body>
+    
+    <div class = "row">
+        <div class = "column" align = left>
+            <h1>User</h1>
+
+            <h4>Name: {{name}} </h4>
+            <h4>State: {{state}} </h4>
+            <h4>Location: {{location}}</h4>
+            <h4>Max Travel Distance: {{tdist}}</h4>
+
+            <form action="/back">
+                <input class="btn btn-primary" type="submit" value="Back">
+            </form>
+        </div>
+        <div class = "column" align = left >
+            <div id="map" style="width:400px;height:400px"></div>
+
+            <script>
+
+                    function myMap() {
+                        var lat1 = '{{ usrLat }}';//46 //JQuery
+                        var lng1 = '{{ usrLng }}';//-117
+                        var myLatLng = {lat: lat1, lng: lng1};
+                        var zm = parseInt('{{ zoom }}');
+
+                        var mapOptions = {
+                            center: new google.maps.LatLng(lat1 ,lng1),
+                            zoom: zm,
+                            mapTypeId: google.maps.MapTypeId.HYBRID
+                        };
+                        var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                        
+                        var marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(lat1,lng1),
+                            map: map,
+                            title: 'You Are Here!'
+                        });
+                        
+                        var pLats = JSON.parse('{{ pLa|tojson }}');
+                        var pLngs = JSON.parse('{{ pLo|tojson }}');
+                        var parkNames = JSON.parse('{{ parks|tojson }}');
+                        var parkObj = JSON.parse('{{ parkObjs|tojson }}');
+
+                        var i = 0;
+                        for(p in parkObj)
+                        {
+                            
+                            var pos = new google.maps.LatLng((parkObj[i][1]),(parkObj[i][2]));
+
+                            var tempMarker = new google.maps.Marker({
+                                position: pos,
+                                map: map,
+                                title: parkObj[i][0]//[i][0]//parkNames[i]
+                            });
+                            console.log(parkObj[i]);
+                            i = i+1;
+                        } 
+
+                    }
+                </script>
+                    
+                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeeM9Ms_AFDC3gOxZixvm4qdgXHf8njFs&callback=myMap"></script>
+            <h2>{{numParks}} Parks Matched</h2>
+            {% for park in parks %}
+         
+            <h4>{{park}}</h4>
+            
+            {% endfor %}
+            
+        </div>
+   
+       
+    </div>    
+    
+    
+</body>
+</html>
