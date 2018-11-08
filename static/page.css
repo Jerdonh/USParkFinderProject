@@ -12,10 +12,45 @@ h1
 h2
 {
     color: moccasin
-
 }
+
+h5:hover 
+{
+    background-color: #555;
+}
+h5
+{
+    width: 100%;
+    
+}
+h6
+{
+    text-align: left;
+    padding-left: 150px;
+}
+
 .column
+{
+    width: 33.33%;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.column2
 {
     width: 50%;
     padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.parkStat
+{
+    padding-left: 20px;
+}
+
+.toStat
+{
+    padding-top: 20px;
 }

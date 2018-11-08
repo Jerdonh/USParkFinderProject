@@ -32,4 +32,13 @@ def getCurrentTemp(lat, lng):
     #print()
     #print(currentFTemp)
     return int(currentFTemp)
+
+def getCurrentWeatherandTemp(lat,lng):
+    url = address + str(lat) + "&lon=" + str(lng)
+    json_data = requests.get(url).json()
+    currentTemp = json_data['main']['temp']
+    currentFTemp = CNVRT.kelvinToFarenheit(currentTemp)
+    currentWeather = json_data['weather'][0]['main']
+    return (currentWeather, currentFTemp)
+    
     

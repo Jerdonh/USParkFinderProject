@@ -22,28 +22,59 @@ class Park:
     annualVisitors = 0
     weather = ""
     currentTemp = 0
+    distance = 0
 
     #methods
     def __init__(self, name = None, state = None,
-                 lat = None, lng = None, vis = None, wthr = False):
-        self.name = name #1
-        self.state = state #2
-        self.lat = lat #3
-        self.lng = lng #4
-        self.annualVisitors = vis #5
-        if(wthr == True):
-            self.setWeather()
-            self.setTemp()
-        #self.weather = cw
-        #self.currentTemp = ct #7
+                 lat = None, lng = None, vis = None,
+                 wthr = False, dist = None):
+
+        if(name != None and state == None and lat == None
+           and lng == None and vis == None and wthr == None
+           and dist == None):
+            self.setParkWithName(name)
+
+        else:
+            self.name = name #1
+            self.state = state #2
+            self.lat = lat #3
+            self.lng = lng #4
+            self.annualVisitors = vis #5
+            if(wthr == True):
+                self.setWeather()
+                self.setTemp()
 
     def __eq__(self, other):
         if(self.name == other.name):
             return True
         else:
             return False
+
+    def __lt__(self, other):
+        return self.name < other.name
+
+    def __gt__(self, other):
+        return self.name > other.name
+
+    def __le__(self, other):
+        return self.name <= other.name
+
+    def __ge__(self, other):
+        return self.name >= other.name
         
-        
+    def __cmp__(self, other):
+        if(self.name > other.name):
+            return 1
+        elif(self.name < other.name):
+            return -1
+        else:
+            return 0
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
     
     def getDistance(self, user):
         """Get the distance between two entities"""
@@ -51,13 +82,25 @@ class Park:
         #(((lat1 - lat2)**2) + ((lng1 - lng2)**2))**0.5
         kmDist = CONV.distBetweenCoords(lat1,lng1,lat2,lng2)
         mDist = CONV.kmToMiles(kmDist)
+        self.distance = mDist
         return mDist
 
+    def setWeatherAndTemp(self, run = True):
+        if(run == True):
+            weathTemp = WTHR.getCurrentWeatherandTemp(self.lat,self.lng)
+        else:
+            weathTemp = ("Weather Placeholder", 300000)
+        self.weather = weathTemp[0]
+        self.currentTemp = weathTemp[1]
+    
     def setWeather(self, date = None):
         self.weather = WTHR.getCurrentWeather(self.lat, self.lng)
 
     def setTemp(self, date = None):
         self.currentTemp = WTHR.getCurrentTemp(self.lat, self.lng)
+
+    def setParkWithName(self, name):
+        pass
          
 """
     def displayParkDeets(self):
@@ -132,10 +175,10 @@ class User:
         #print("Park Distance: ", park.getDistance(self))
         #print(self.maxTravelDistance, " < ", park.getDistance(self))
         if((float(park.getDistance(self))) <= (self.maxTravelDistance)):
-            print("\t",park.name, ": is within the range of ", self.name, "'s location", sep = "")
+            #print("\t",park.name, ": is within the range of ", self.name, "'s location", sep = "")
             return True
         else:
-            print("\t",park.name," is not within the travel range")
+            #print("\t",park.name," is not within the travel range")
             return False
 
     def checkWeather(self, park):

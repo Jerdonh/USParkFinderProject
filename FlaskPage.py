@@ -2,7 +2,7 @@
 #FLASK APP
 #Herewegoooooo
 
-#TO RUN FOLLOWING COMMAND IN SHELL IN CURRENT DIRECTORY
+#TO RUN: USE FOLLOWING COMMAND IN SHELL IN CURRENT DIRECTORY
 #FLASK_APP=FlaskPage.py flask run
 
 import Importer as IMPRT
@@ -13,7 +13,15 @@ app = Flask(__name__)
 
 
 
-@app.route("/send",methods=["GET","POST"])
+@app.route("/more",methods = ["GET","POST"])
+def more():
+    if request.method == 'POST':
+        select = request.form.get('parkSelect')
+        print(select)
+        return render_template('parkStats.html',park = select)
+
+
+@app.route("/Parks",methods=["GET","POST"])
 def send():
     if request.method == 'POST':
         name = request.form['Name']
@@ -24,8 +32,12 @@ def send():
         usrLat = user.lat
         usrLng = user.lng
         parks = IMPRT.getParks(user)
+        #print(parks)
+        #parks.sort()
+        #print(parks)
         zoom = getZoom(mtd)
         pNames = getPNames(parks)
+        pNames.sort()
         pLa, pLo = getPLatLngs(parks)
         pTups = getPTups(parks)
         return render_template('test.html', name=name, state=state,
@@ -83,7 +95,8 @@ def getPLatLngs(parks):
 def getPTups(parks):
     pTups = []
     for p in parks:
-        pTups.append((p.name,p.lat,p.lng))
+        p.setWeatherAndTemp(run = False)
+        pTups.append((p.name,p.lat,p.lng,round(p.distance,2),p.state,p.weather))
     pTups = list(set(pTups))
-    print(pTups)
+    #print(pTups)
     return pTups

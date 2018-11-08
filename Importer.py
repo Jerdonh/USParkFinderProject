@@ -7,7 +7,7 @@ import PARKSMODEL as MDL
 
 
 def importParks():
-    fileName = "US_Parks_DATA.csv"
+    fileName = "ParksData.csv" #"US_Parks_DATA.csv"
     parks = []
     f = open(fileName,"r")
     i = 0
@@ -29,11 +29,12 @@ def createPark(line):
     #for i in items:
     #    print(i)
     name = items[0]
-    year = int(items[1])
-    state = items[2]
-    lat = float(items[3])
-    lng = float(items[4])
-    visitors = int(items[5])
+    year = 3001 #int(items[1])#Old import csv
+    state = items[3]
+    state = state.strip()
+    lat = float(items[1])
+    lng = float(items[2])
+    visitors = 0 #int(items[5])#Old import csv
     tempPark = MDL.Park(name,state,lat,lng,visitors)
     return tempPark
 
