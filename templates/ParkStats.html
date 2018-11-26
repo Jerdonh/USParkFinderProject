@@ -9,14 +9,61 @@
 </head>
 <body>
         <center>
-                <h1>{{park}}</h1>
+                <h1>{{parkName}}</h1>
         </center>
-        <div class = "column2" align = "center" >
-                <h2>Stats</h2>
-        </div>
+        <div class = "row">
+                <div class = "column2" align = "center" >
+                        <h2>Map</h2>
+                        <div id="map" style="width:400px;height:400px"></div>
+                        <script>
+                                function myMap() {
+                                var parkLat = '{{ pLat }}';
+                                var parkLng = '{{ pLng }}';
+                                console.log("Park Lat:",parkLat);
+                                console.log("Park Lng:",parkLng);
+                                var parkName = '{{ parkName }}';
+                                var lat1 = 46;//'{{ usrLat }}';//46 //JQuery
+                                var lng1 = -117;//'{{ usrLng }}';//-117
+                                var myLatLng = {lat: lat1, lng: lng1};
+                                var zm = parseInt(5);//'{{ zoom }}');
 
-        <div class = "column2" align = "center" >
-                <h2>Map</h2>
+                                var mapOptions = {
+                                center: new google.maps.LatLng(lat1 ,lng1),
+                                zoom: zm,
+                                mapTypeId: google.maps.MapTypeId.HYBRID
+                                };
+                                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                        
+                                var marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(lat1,lng1),
+                                icon: {
+                                        path: google.maps.SymbolPath.CIRCLE,
+                                        scale: 5,
+                                        fillOpacity:1,
+                                        fillColor:'blue',
+                                        strokeColor:'white',
+                                        strokeWeight:1
+                                },
+                                draggable: false,
+                                map: map,
+                                title: 'You Are Here!'
+                                });
+
+                                var pMarker = new google.maps.Marker({
+                                position: new google.maps.LatLng(parkLat,parkLng),
+                                draggable: false,
+                                map: map,
+                                title: parkName
+                                });
+
+                                };
+                        </script>
+                        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeeM9Ms_AFDC3gOxZixvm4qdgXHf8njFs&callback=myMap"></script>
+
+                </div>
+                <div class = "column2" align = "center" >
+                        <h2>Stats</h2>
+                </div>
         </div>
 </body>
 </html>

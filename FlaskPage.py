@@ -17,8 +17,16 @@ app = Flask(__name__)
 def more():
     if request.method == 'POST':
         select = request.form.get('parkSelect')
-        print(select)
-        return render_template('parkStats.html',park = select)
+        print("Park Selected: ",select)
+        #if(select == ""):
+        #    return render_template('test.html',park = select)
+        #else:
+        state = request.form['State']
+        loc = request.form['Location']
+        print("State: ",state,", Location: ",loc)
+        park = getMoreParkData(select)
+        return render_template('parkStats.html',parkName = select,
+                               pLat = park.lat, pLng = park.lng)
 
 
 @app.route("/Parks",methods=["GET","POST"])
@@ -93,6 +101,7 @@ def getPLatLngs(parks):
     return pLa, pLo
 
 def getPTups(parks):
+    """returns a list of park data tuples for parks page"""
     pTups = []
     for p in parks:
         p.setWeatherAndTemp(run = False)
@@ -100,3 +109,8 @@ def getPTups(parks):
     pTups = list(set(pTups))
     #print(pTups)
     return pTups
+
+def getMoreParkData(pName):
+    """returns in depth data about one park for the more page"""
+    park = IMPRT.getPark(pName)
+    return park

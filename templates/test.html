@@ -148,6 +148,10 @@
             
             {% endfor %}
             
+
+
+
+
             <div class = "toStat">
                 <form method = "POST" action="/more">
                     <select name = "parkSelect">
@@ -157,7 +161,18 @@
                         {% endfor %}
                     </select>
 
-                
+
+                    
+                    <div style="display:none;" class="form-group">
+                        <input type="text" name="State" value="{{state}}">
+                    </div>
+                    <div style="display:none;" class="form-group">
+                        <input type="text" name="Location" value="{{location}}">
+                    </div>
+                    <div style="display:none;" class="form-group">
+                        <input type="text" name="maxTravelDistance" value="{{tdist}}">
+                    </div>
+                    
                     <input class="btn btn-primary" type="submit" value="Show Park Stats">
                 </form>
             </div>

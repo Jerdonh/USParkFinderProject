@@ -43,13 +43,21 @@ def getParks(user):
     parks = importParks()
     print(len(parks), "parks imported")
     fParks = []
-    print(len(fParks),"initial fParks size")
-    print("Max Travel Dist: ", user.maxTravelDistance)
+    #print(len(fParks),"initial fParks size")
+    #print("Max Travel Dist: ", user.maxTravelDistance)
     for p in parks:
         if(user.checkAbsolutes(p) == True):
             #print(p.name,"Absolute Results == True")
             fParks.append(p)
-    print(len(fParks),"final fParks size")
+    #print(len(fParks),"final fParks size")
     return fParks 
     #for p in parks:
     #    print(p)
+
+def getPark(parkName):
+    parks = importParks()
+    for p in parks:
+        if(p.name == parkName):
+            return p
+    return None
+    
