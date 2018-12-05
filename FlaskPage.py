@@ -7,6 +7,7 @@
 
 import Importer as IMPRT
 import PARKSMODEL as MDL
+import Conversions as CONV
 
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
@@ -15,6 +16,7 @@ app = Flask(__name__)
 
 @app.route("/more",methods = ["GET","POST"])
 def more():
+    """Renders the stats(more) page of the Website"""
     if request.method == 'POST':
         select = request.form.get('parkSelect')
         print("Park Selected: ",select)
@@ -23,14 +25,20 @@ def more():
         #else:
         state = request.form['State']
         loc = request.form['Location']
-        print("State: ",state,", Location: ",loc)
-        park = getMoreParkData(select)
+        #print("State: ",state,", Location: ",loc)
+        usrLatLng = getUsrLoc(state, loc)
+        park = getMoreParkData(select,usrLatLng)
+        #print("park: ",park.__dict__)
         return render_template('parkStats.html',parkName = select,
-                               pLat = park.lat, pLng = park.lng)
+                               pLat = park.lat, pLng = park.lng,
+                               usrLat = usrLatLng[0], usrLng = usrLatLng[1],
+                               state = park.state, pDist = park.distance,
+                               weath = park.weather, temp = park.currentTemp)
 
 
 @app.route("/Parks",methods=["GET","POST"])
 def send():
+    """Renders the main page of the US Parks Finder Website"""
     if request.method == 'POST':
         name = request.form['Name']
         state = request.form['State']
@@ -62,6 +70,7 @@ def back():
 
 @app.route("/")
 def main():
+    """Renders the first page of the US Park Finders website"""
     return render_template("index.html")
 
 if __name__ =="__main__":
@@ -72,7 +81,9 @@ if __name__ =="__main__":
 
 
 def getZoom(mtd):
-    """Returns the zoom value for the map"""
+    """Returns the zoom value for the map
+        -input: mtd - type:int
+    """
     radius = [1600, 800,400,200,100,50,25,10]
     i = 0
     for r in radius:
@@ -82,7 +93,9 @@ def getZoom(mtd):
     return i+2
 
 def getPNames(parks):
-    """Creates a list of park names"""
+    """Creates a list of park names
+        -input: parks - type: Park List
+    """
     pNames = []
     for p in parks:
         pNames.append(p.name)
@@ -90,7 +103,9 @@ def getPNames(parks):
     return pNames
 
 def getPLatLngs(parks):
-    """creates a list of lat lng tuples"""
+    """creates a list of lat lng tuples
+        -input: parks - type: Park List
+    """
     pLa = []
     pLo = []
     for p in parks:
@@ -101,7 +116,9 @@ def getPLatLngs(parks):
     return pLa, pLo
 
 def getPTups(parks):
-    """returns a list of park data tuples for parks page"""
+    """returns a list of park data tuples for parks page
+        -input: parks - type:string
+    """
     pTups = []
     for p in parks:
         p.setWeatherAndTemp(run = False)
@@ -110,7 +127,20 @@ def getPTups(parks):
     #print(pTups)
     return pTups
 
-def getMoreParkData(pName):
-    """returns in depth data about one park for the more page"""
+def getMoreParkData(pName,usrLatLng):
+    """returns in depth data about one park for the more page
+        -inputs: pName - type:string, usrLatLng - type:tuple
+    """
     park = IMPRT.getPark(pName)
+    park.setWeatherAndTemp(run = True)
+    park.getDistance(latlng = usrLatLng)
     return park
+
+def getUsrLoc(state, loc):
+    """returns tuple containing latitude and longitude
+        -inputs: state - type:string, loc - type:string
+    """
+    latlng = CONV.getLocToCoords(state, loc)
+    lat = latlng[0]
+    lng = latlng[1]
+    return (lat,lng)

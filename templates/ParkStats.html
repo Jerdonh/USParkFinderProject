@@ -17,15 +17,19 @@
                         <div id="map" style="width:400px;height:400px"></div>
                         <script>
                                 function myMap() {
+                                var directionsService = new google.maps.DirectionsService;
+                                var directionsDisplay = new google.maps.DirectionsRenderer;
                                 var parkLat = '{{ pLat }}';
                                 var parkLng = '{{ pLng }}';
                                 console.log("Park Lat:",parkLat);
                                 console.log("Park Lng:",parkLng);
                                 var parkName = '{{ parkName }}';
-                                var lat1 = 46;//'{{ usrLat }}';//46 //JQuery
-                                var lng1 = -117;//'{{ usrLng }}';//-117
+                                var lat1 = '{{ usrLat }}';//46 //JQuery
+                                var lng1 = '{{ usrLng }}';//-117
                                 var myLatLng = {lat: lat1, lng: lng1};
                                 var zm = parseInt(5);//'{{ zoom }}');
+                                var pLatLng = new google.maps.LatLng(parkLat,parkLng);
+                                var uLatLng = new google.maps.LatLng(lat1 ,lng1)
 
                                 var mapOptions = {
                                 center: new google.maps.LatLng(lat1 ,lng1),
@@ -33,7 +37,9 @@
                                 mapTypeId: google.maps.MapTypeId.HYBRID
                                 };
                                 var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-                        
+                                
+                                directionsDisplay.setMap(map);
+
                                 var marker = new google.maps.Marker({
                                 position: new google.maps.LatLng(lat1,lng1),
                                 icon: {
@@ -55,14 +61,50 @@
                                 map: map,
                                 title: parkName
                                 });
-
+                                
+                                        calculateAndDisplayRoute(directionsService,directionsDisplay,pLatLng,uLatLng,parkName)
                                 };
+
+                                function calculateAndDisplayRoute(directionsService, directionsDisplay, pLatLng, uLatLng, parkName) {
+                                        directionsService.route({
+                                                origin: uLatLng,
+                                                destination: pLatLng,
+                                                travelMode: 'DRIVING'
+                                        }, function(response, status) {
+                                        if (status === 'OK') {
+                                                directionsDisplay.setDirections(response);
+                                        } else 
+                                        {
+                                                directionsService.route({
+                                                origin: uLatLng,
+                                                destination: parkName,
+                                                travelMode: 'DRIVING'
+                                                }, function(response, status){
+                                                        if (status === 'OK') {
+                                                                directionsDisplay.setDirections(response);}
+                                                        else 
+                                                        {
+                                                                window.alert('Directions request failed due to ' + status);
+                                                        }
+                                                });
+                                                //window.alert('Directions request failed due to ' + status);
+                                        }
+                                        });
+                                }
                         </script>
                         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeeM9Ms_AFDC3gOxZixvm4qdgXHf8njFs&callback=myMap"></script>
 
                 </div>
                 <div class = "column2" align = "center" >
                         <h2>Stats</h2>
+                        <br><br>
+                        <h3>State: {{state}}</h3>
+                        <br>
+                        <h3>Distance to Park: {{pDist}} miles</h3>
+                        <br>
+                        <h3>Current Weather: {{weath}}</h3>
+                        <br>
+                        <h3>Current Temperature:{{temp}}˚F</h3>
                 </div>
         </div>
 </body>

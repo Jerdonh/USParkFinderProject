@@ -17,6 +17,9 @@ address = "http://api.openweathermap.org/data/2.5/weather?appid=75d52627e50e87d5
 WeatherTypes = ["Clear","Clouds","Drizzle","Rain","Snow","Thunderstorm"]
 
 def getCurrentWeather(lat, lng):
+    """Returns the Current Weather (String) of the location
+        -input: lat - type:double, lng - type:double
+    """
     url = address + str(lat) + "&lon=" + str(lng)
     json_data = requests.get(url).json()
     currentWeather = json_data['weather'][0]['main']#"Super Stormy Dawg"
@@ -25,6 +28,9 @@ def getCurrentWeather(lat, lng):
     return currentWeather
 
 def getCurrentTemp(lat, lng):
+    """Returns the current temperature (int) of the location
+        -inputs: lat - type:double, lng - type:double
+    """
     url = address + str(lat) + "&lon=" + str(lng)
     json_data = requests.get(url).json()
     currentTemp = json_data['main']['temp']
@@ -34,9 +40,14 @@ def getCurrentTemp(lat, lng):
     return int(currentFTemp)
 
 def getCurrentWeatherandTemp(lat,lng):
+    """Returns the current temperature(int) and weather(string) of the location
+        -inputs: lat - type:double, lng - type:double
+    """
     url = address + str(lat) + "&lon=" + str(lng)
     json_data = requests.get(url).json()
     currentTemp = json_data['main']['temp']
+    #print("CURRENT TEMP: ", currentTemp)
+    #KELVIN TEMP IS CORRECT SOMETHING ABOUT THE CONVERSION IS NOW OFF
     currentFTemp = CNVRT.kelvinToFarenheit(currentTemp)
     currentWeather = json_data['weather'][0]['main']
     return (currentWeather, currentFTemp)
