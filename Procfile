@@ -1,1 +1,1 @@
-web: gunicorn -w 4 FlaskPage:app
+web: evn PYTHONPATH=$PYTHONPATH:$PWD/FlaskPage gunicorn FlaskPage:app
