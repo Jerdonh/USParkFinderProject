@@ -29,7 +29,7 @@ def more():
         usrLatLng = getUsrLoc(state, loc)
         park = getMoreParkData(select,usrLatLng)
         #print("park: ",park.__dict__)
-        return render_template('parkStats.html',parkName = select,
+        return render_template('ParkStats.html',parkName = select,
                                pLat = park.lat, pLng = park.lng,
                                usrLat = usrLatLng[0], usrLng = usrLatLng[1],
                                state = park.state, pDist = park.distance,
