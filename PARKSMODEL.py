@@ -182,6 +182,7 @@ class User:
 
 
     """
+    *******************DEPRACATED -- DEPRACATED -- DEPRACATED********************
     *******************PARK/USER COMPATIBILITY CHECKS****************************
     """
     def checkAbsolutes(self, park):

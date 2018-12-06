@@ -7,6 +7,9 @@ import PARKSMODEL as MDL
 
 
 def importParks():
+    """
+        builds and returns a list of park objects from ParksData.csv
+    """
     fileName = "ParksData.csv" #"US_Parks_DATA.csv"
     parks = []
     f = open(fileName,"r")
@@ -39,6 +42,12 @@ def createPark(line):
     return tempPark
 
 def getParks(user):
+    """
+    calls import parks to get list of park objects
+    checks parks against user preferences
+    returns a list of parks that conform to user preferences
+    -inputs: user - type:User
+    """
     print("getParks Entered")
     parks = importParks()
     print(len(parks), "parks imported")
@@ -55,6 +64,9 @@ def getParks(user):
     #    print(p)
 
 def getPark(parkName):
+    """Returns a single Park obj that matches the input parkName
+        -input: parkName - type:String
+    """
     parks = importParks()
     for p in parks:
         if(p.name == parkName):
