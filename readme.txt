@@ -28,9 +28,12 @@ __________________________________
     runtime.txt: specifies python version to run on
     Procfile: specifies moduleName and app name for gunicorn deployment
     ParksData.csv: contains all US Park data required to run web app
+    MANIFEST.in: specifies all non-python files and dirs to be included in dist
 __________________________________
 Subdirs:
 __________________________________
     templates: contains html templates for webpage
     Pre-Processing: contains all processes used to build park data
-    Static: Contains StyleSheets
+    static: Contains StyleSheets
+    build: Contains .py duplicates for distribution
+    dist: Contains tar.gz of entire project for easy distribution
