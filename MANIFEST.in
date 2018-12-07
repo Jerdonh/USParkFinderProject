@@ -1,0 +1,6 @@
+include *.txt
+include *.csv
+include Pre-Processing/*
+include templates/*
+include static/*
+include Procfile
