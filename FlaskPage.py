@@ -33,7 +33,7 @@ def more():
                                pLat = park.lat, pLng = park.lng,
                                usrLat = usrLatLng[0], usrLng = usrLatLng[1],
                                state = park.state, pDist = park.distance,
-                               weath = park.weather, temp = park.currentTemp)
+                               weath = park.weather, temp = round(park.currentTemp,2))
 
 
 @app.route("/Parks",methods=["GET","POST"])

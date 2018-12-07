@@ -9,6 +9,9 @@ import PARKSMODEL as MDL
 def importParks():
     """
         builds and returns a list of park objects from ParksData.csv
+    >>> p = importParks()
+    >>> len(p) > 0
+    True
     """
     fileName = "ParksData.csv" #"US_Parks_DATA.csv"
     parks = []
@@ -26,7 +29,13 @@ def importParks():
         
         
 def createPark(line):
-    """turns csv line into park object and returns it"""
+    """turns csv line into park object and returns it
+    >>> p = createPark("Park, 47.5301, -122.0326, Washington")
+    >>> p.name
+    'Park'
+    >>> p.state
+    'Washington'
+    """
     #print(line)
     items = line.split(",")
     #for i in items:
@@ -43,14 +52,19 @@ def createPark(line):
 
 def getParks(user):
     """
-    calls import parks to get list of park objects
-    checks parks against user preferences
-    returns a list of parks that conform to user preferences
-    -inputs: user - type:User
+        calls import parks to get list of park objects
+        checks parks against user preferences
+        returns a list of parks that conform to user preferences
+        -inputs: user - type:User
+    >>> u = MDL.User(name = "Jerdon", state = "Washington", addy = "Pullman", mTD = 100)
+    >>> p = getParks(u)
+    >>> print(p)
+    [Nez Perce National Historical Park, Whitman Mission National Historic Site]
     """
-    print("getParks Entered")
+    
+    #print("getParks Entered")
     parks = importParks()
-    print(len(parks), "parks imported")
+    #print(len(parks), "parks imported")
     fParks = []
     #print(len(fParks),"initial fParks size")
     #print("Max Travel Dist: ", user.maxTravelDistance)
@@ -66,6 +80,10 @@ def getParks(user):
 def getPark(parkName):
     """Returns a single Park obj that matches the input parkName
         -input: parkName - type:String
+    >>> p = getPark("Nez Perce National Historical Park")
+    >>> p.name
+    'Nez Perce National Historical Park'
+    
     """
     parks = importParks()
     for p in parks:

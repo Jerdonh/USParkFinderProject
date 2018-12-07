@@ -10,6 +10,7 @@ now = DT.datetime.now()
 
 
 KEY = "AIzaSyAeeM9Ms_AFDC3gOxZixvm4qdgXHf8njFs"
+Ke2 = "AIzaSyCxmUvdfNqOkD2SDm50kX82wtWB8kTliI0"
 apiURL = "https://maps.googleapis.com/maps/api/geocode/json?address="
 
 class Park:
@@ -17,6 +18,13 @@ class Park:
         -contains working attributes:name,state,yearEstablished,
                                     lat,lng,weather,
                                     currentTemp,distance
+        >>> x = Park(name = "Jerdon",state = "Washington", lat = 46.7297771, lng = -117.1817377)
+        >>> x.name
+        'Jerdon'
+        >>> x.state
+        'Washington'
+        >>> x.lat
+        46.7297771
         """
     #attributes
     name = "n/a"
@@ -52,30 +60,60 @@ class Park:
                 self.setTemp()
 
     def __eq__(self, other):
-        """Overloads == operator to check the name for equality"""
+        """Overloads == operator to check the name for equality
+        >>> Park(name = 'Jerdon') == Park(name = 'Helgeson')
+        False
+        >>> Park(name = 'Test') == Park(name = 'Test')
+        True
+        """
         if(self.name == other.name):
             return True
         else:
             return False
 
     def __lt__(self, other):
-        """Overloads less than operator to compare names alphabetically"""
+        """Overloads less than operator to compare names alphabetically
+        >>> Park(name = 'Jerdon') < Park(name = 'Helgeson')
+        False
+        >>> Park(name = 'Test') < Park(name = 'Zest')
+        True
+        """
         return self.name < other.name
 
     def __gt__(self, other):
-        """Overloads greater than operator to compare names alphabetically"""
+        """Overloads greater than operator to compare names alphabetically
+        >>> Park(name = 'Herdon') > Park(name = 'Jelgeson')
+        False
+        >>> Park(name = 'Zest') > Park(name = 'Test')
+        True
+        """
         return self.name > other.name
 
     def __le__(self, other):
-        """Overloads less than equal operator to compare names alphabetically"""
+        """Overloads less than equal operator to compare names alphabetically
+        >>> Park(name = 'Jerdon') <= Park(name = 'Helgeson')
+        False
+        >>> Park(name = 'Test') <= Park(name = 'Zest')
+        True
+        >>> Park(name = 'Zest') <= Park(name = 'Zest')
+        True
+        """
         return self.name <= other.name
 
     def __ge__(self, other):
-        """Overloads greater than equal operator to compare names alphabetically"""
+        """Overloads greater than equal operator to compare names alphabetically
+        >>> Park(name = 'Herdon') >= Park(name = 'Jelgeson')
+        False
+        >>> Park(name = 'Zest') >= Park(name = 'Test')
+        True
+        >>> Park(name = 'Zest') >= Park(name = 'Zest')
+        True
+        """
         return self.name >= other.name
         
     def __cmp__(self, other):
-        """Overloads comparison operator to compare names alphabetically"""
+        """Overloads comparison operator to compare names alphabetically
+        """
         if(self.name > other.name):
             return 1
         elif(self.name < other.name):
@@ -84,11 +122,17 @@ class Park:
             return 0
 
     def __str__(self):
-        """Overloads str to print just park name"""
+        """Overloads str to print just park name
+        >>> print(Park(name = 'Jerdon'))
+        Jerdon
+        """
         return self.name
 
     def __repr__(self):
-        """Overloads repr to print just park name"""
+        """Overloads repr to print just park name
+        >>> Park(name = 'Jerdon')
+        Jerdon
+        """
         return self.name
     
     def getDistance(self, user = None, latlng = None):
@@ -96,6 +140,13 @@ class Park:
            inputs: user - type: User, latlng - type: tuple
            -provided a user: return the distance from the park to the user
            -provided a latlng: return the distance from the park to the latitude and longitude point
+        >>> x = Park(name = "Jerdon",state = "Washington", lat = 46.7297771, lng = -117.1817377)
+        >>> u = User(name = "Jerdon", state = "Washington", addy = "Pullman")
+        >>> u2 = User(name = "Jerdon", state = "Washington", addy = "Seattle")
+        >>> x.getDistance(user = u)
+        0.0
+        >>> round(x.getDistance(user = u2),2)
+        249.42
         """
         if(user != None):
             lat1 = self.lat; lat2 = user.lat; lng1 = self.lng; lng2 = user.lng
@@ -112,6 +163,12 @@ class Park:
             inputs: run - type: boolean
             -provided a true run input: will set weather and temp attributes using google api
             -provided a false run input: will set weather and temp attributes using arbitrary placeholders
+        >>> x = Park(name = "Jerdon",state = "Washington", lat = 46.7297771, lng = -117.1817377)
+        >>> x.setWeatherAndTemp(run = False)
+        >>> x.weather
+        'Weather Placeholder'
+        >>> x.currentTemp
+        300000
         """
         if(run == True):
             weathTemp = WTHR.getCurrentWeatherandTemp(self.lat,self.lng)
@@ -124,12 +181,20 @@ class Park:
     def setWeather(self, date = None):
         """Sets weather attribute of the park object
             inputs: n/a
+        >>> x = Park(name = "Jerdon",state = "Washington", lat = 46.7297771, lng = -117.1817377)
+        >>> x.setWeather()
+        >>> x.weather == None
+        False
         """
         self.weather = WTHR.getCurrentWeather(self.lat, self.lng)
 
     def setTemp(self, date = None):
         """Sets currentTemp attribute of the park object
             inputs: n/a
+        >>> x = Park(name = "Jerdon",state = "Washington", lat = 46.7297771, lng = -117.1817377)
+        >>> x.setTemp()
+        >>> x.currentTemp == None
+        False
         """
         self.currentTemp = WTHR.getCurrentTemp(self.lat, self.lng)
     
@@ -142,13 +207,22 @@ class User:
         User Class: reprents a user of the Program
         -contains working attributes:name,state,addy,
                                     mTD,lat,lng
+        >>> u = User(name = "Jerdon", state = "Washington", addy = "Issaquah", mTD = 100)
+        >>> u.name
+        'Jerdon'
+        >>> u.state
+        'Washington'
     """
     def __init__(self,name = None, state = None, addy = None,
                  mTD = None, iS = None,
                  pVD = None, pW = ["Any"], pT = None, tR = None,
                  tSD = (now.month, now.day), tED = (now.month, now.day),
                  oPN = None):
-        """Init Method for User Class: Required inputs are: state and addy"""
+        """Init Method for User Class: Required inputs are: state and addy
+        >>> u = User(name = "Jerdon", state = "Washington", addy = "Issaquah", mTD = 100)
+        >>> u.maxTravelDistance
+        100
+        """
         if(oPN != None):
             pass
         else:
@@ -167,7 +241,14 @@ class User:
 
     def setLatLng(self, addy):
         """Sets Latitude and Longitude attributes of User obj
-            -uses google maps api to obtain lat and lng"""
+            -uses google maps api to obtain lat and lng
+        >>> u = User(name = "Jerdon", state = "Washington", addy = "Issaquah", mTD = 100)
+        >>> u.setLatLng(addy = "Issaquah")
+        >>> round(u.lat,2)
+        47.53
+        >>> round(u.lng,2)
+        -122.03
+        """
         request = apiURL + addy + "&key="+KEY
         response = (requests.get(request)).json()
         jsonData = response['results'][0]
@@ -175,7 +256,7 @@ class User:
         self.lng = jsonData['geometry']['location']['lng']
         
     def displayUserDeets(self):
-        """Prints all of the attributes of this User object"""
+        """DEPRACATED: Prints all of the attributes of this User object"""
         print("User Information:")
         for d in self.__dict__:
             print("\t",d,": ",self.__dict__[d])

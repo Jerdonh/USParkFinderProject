@@ -47,6 +47,8 @@ def distBetweenCoords(lat1, lng1,lat2,lng2):
 def kmToMiles(km):
     """Converts Kilometers to miles: returns miles
         -input: km - type:float
+        >>> round(kmToMiles(100),2)
+        62.14
     """
     return km * 0.621371
     
@@ -57,6 +59,8 @@ def kmToMiles(km):
 def kelvinToFarenheit(K):
     """Converts Kelvin to Farenheit: returns Farenheit
         -input: K - type:float
+        >>> round(kelvinToFarenheit(300),2)
+        80.33
     """
     #print("KELVIN: ",K)
     F = (9/5) *(K- 273.15)+32

@@ -8,16 +8,16 @@ Documentation Style: pydoc
 	-to run: $pydoc3 moduleName
 
 Testing Style: doctest
-	-to run: $python3 moduleName.py
+	-to run: $python3 -m doctest -v moduleName.py
 
  _________________________________
 |ModuleName | Documented | Tested |
 |___________|____________|________|
 |FlaskPage  |     √      |        |
-|PARKSMODEL |     √      |        |
-|Importer   |     √      |        |
-|Conversions|     √      |  1/2   |
-|Weather    |     √      |        |
+|PARKSMODEL |     √      |    √   |
+|Importer   |     √      |    √   |
+|Conversions|     √      |    √   |
+|Weather    |     √      |    √   |
 |___________|____________|________|
 
 ********************************************************************************

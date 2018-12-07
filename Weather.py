@@ -19,6 +19,9 @@ WeatherTypes = ["Clear","Clouds","Drizzle","Rain","Snow","Thunderstorm"]
 def getCurrentWeather(lat, lng):
     """Returns the Current Weather (String) of the location
         -input: lat - type:double, lng - type:double
+    >>> cw = getCurrentWeather(47.53,-122.03)
+    >>> cw == None
+    False
     """
     url = address + str(lat) + "&lon=" + str(lng)
     json_data = requests.get(url).json()
@@ -30,6 +33,9 @@ def getCurrentWeather(lat, lng):
 def getCurrentTemp(lat, lng):
     """Returns the current temperature (int) of the location
         -inputs: lat - type:double, lng - type:double
+    >>> ct = getCurrentTemp(47.53,-122.03)
+    >>> ct == None
+    False
     """
     url = address + str(lat) + "&lon=" + str(lng)
     json_data = requests.get(url).json()
@@ -42,6 +48,9 @@ def getCurrentTemp(lat, lng):
 def getCurrentWeatherandTemp(lat,lng):
     """Returns the current temperature(int) and weather(string) of the location
         -inputs: lat - type:double, lng - type:double
+    >>> cwt = getCurrentWeatherandTemp(47.53,-122.03)
+    >>> cwt == (None, None)
+    False
     """
     url = address + str(lat) + "&lon=" + str(lng)
     json_data = requests.get(url).json()
