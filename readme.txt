@@ -1,7 +1,7 @@
 US PARK FINDER PROJECT README.txt
 
 To run development localhost:FLASK_APP=FlaskPage.py flask run
-Heroku Deployment: https://us-park-finder.herokuapp.com/more
+Heroku Deployment: https://us-park-finder.herokuapp.com
 
 
 Documentation Style: pydoc
